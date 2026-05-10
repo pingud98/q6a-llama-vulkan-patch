@@ -1,0 +1,21 @@
+--- ggml/src/ggml-backend.cpp	2026-05-10 17:51:34
++++ ggml/src/ggml-backend.cpp	2026-05-10 17:55:54
+@@ -894,6 +894,18 @@
+ 
+     if (tensor->buffer || (tensor->view_src && tensor->view_src->buffer)) {
+         // since the tensor is pre-allocated, it cannot be moved to another backend
++        // Try to find a backend matching this buffer, ignoring op support
++        // (some ops like NONE or data movement ops may not be registered on all backends)
++        {
++            ggml_backend_buffer_t buf = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
++            for (int i = 0; i < sched->n_backends; i++) {
++                if (ggml_backend_supports_buft(sched->backends[i], buf->buft)) {
++                    cur_backend_id = i;
++                    SET_CAUSE(tensor, "1.buft");
++                    return cur_backend_id;
++                }
++            }
++        }
+         ggml_backend_buffer_t buffer = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
+         GGML_ABORT("pre-allocated tensor (%s) in a buffer (%s) that cannot run the operation (%s)", tensor->name, ggml_backend_buffer_name(buffer), ggml_op_name(tensor->op));
+     }
