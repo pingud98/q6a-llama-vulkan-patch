@@ -1,6 +1,10 @@
+# Intro 
+
+I've been trying to get the "best" performance out of LLMs on my new Radxa Q6A SBC and to be honest I'm not very impressed with the results (before or after) but here's a way to get the GPU working with Llama.cpp. I think my expectations of the 15 TOPS NPU were way too big, as the Hexagon v68 is a pretty small and limited thing, likewise the Adreno 643 is no RTX 5090. I got deepseek v4 flash to help me build this after giving up on LiteRT-LM with the NPU. Basically the results are a wash all round and getting more than 10tok/s isn't possible with this hardware and a decent sized context. I'm moving on trying Immich AI on it and TTS/STT next. You can also check out my other repos with Llama cpp patched to run on the NPU and a guide to how that works ("working" being slower than CPU. 
+
 # Q6A llama.cpp Vulkan Patch + Benchmarks
 
-Fixes llama.cpp's GPU backend on **Turnip Adreno 643** (Mesa Freedreno) — the GPU inside the **Radxa Dragon Wing Q6A** (Qualcomm QCS6490).
+This repo fixes llama.cpp's GPU backend on **Turnip Adreno 643** (Mesa Freedreno) — the GPU inside the **Radxa Dragon Wing Q6A** (Qualcomm QCS6490).
 
 ## The Problem
 
